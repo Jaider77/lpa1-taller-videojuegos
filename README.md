@@ -7,134 +7,124 @@
 
 ## Autor
 
-- [@estudiante](https://www.github.com/estudiante)
+Jaider Francisco Asprilla reyes 
+
+- [@estudiante](https://github.com/Jaider77)
 
 ## Descripción del Proyecto
+🪐 Space Adventure
 
-Este proyecto consiste en el desarrollo de un videojuego básico utilizando los principios de la **Programación Orientada a Objetos** (POO). Los estudiantes crearán un mundo de juego interactivo donde los jugadores pueden controlar un personaje, explorar escenarios, interactuar con objetos y enemigos, y progresar a través de la historia. El juego se diseñará para enfatizar los conceptos de **POO**, como clases, objetos, herencia, polimorfismo y encapsulamiento. A través de este proyecto, los estudiantes aplicarán sus conocimientos de POO para construir un sistema modular y extensible, sentando las bases para proyectos de software más complejos en el futuro.
+Space Adventure es un videojuego tipo shooter espacial 2D desarrollado en Python con Pygame, donde el jugador debe sobrevivir a múltiples oleadas de enemigos, usar poderes especiales y derrotar jefes épicos cada 5 niveles.
+Cuenta con 10 escenarios animados con scroll, música ambiental (opcional), y una progresión de dificultad dinámica.
 
-El proyecto se dividirá en varias fases, comenzando con la creación de clases para personajes, enemigos y objetos, y luego avanzando hacia la implementación de la lógica del juego, el sistema de combate y la interfaz de usuario básica. Se fomentará el uso de buenas prácticas de programación, como la documentación del código, el control de versiones con Git. Al finalizar el proyecto, los estudiantes habrán ganado experiencia práctica en el diseño y desarrollo de software orientado a objetos, así como en la resolución de problemas y el trabajo en equipo.
+🎮 Características principales
 
-#### Objetivos del Proyecto
+🚀 10 niveles únicos con fondos animados (scroll infinito).
 
-1.  Aplicar los principios de la programación orientada a objetos (POO), demostrando su capacidad para diseñar e implementar clases, objetos, herencia, polimorfismo y encapsulamiento en el contexto del desarrollo de un videojuego.
-2.  Desarrollar un sistema modular y extensible, de manera que sea fácil de modificar y expandir, permitiendo la adición de nuevas funcionalidades y contenido en el futuro.
-3.  Implementar la lógica del juego y el sistema de combate funcional y equilibrado, así como la lógica para la interacción con objetos y enemigos en el mundo del juego.
-4.  Crear una interfaz de usuario básica que permita al jugador interactuar con el mundo del juego y visualizar la información relevante (puntos de vida, inventario, etc.).
-5.  Practicar buenas prácticas de programación como el control de versiones (Git), documentar su código.
+🧠 Dificultad progresiva: más enemigos, más rápidos y más agresivos.
 
-## Requerimientos
+💥 Power-ups con habilidades especiales:
 
-* **R1.1. Creación de Personaje Jugable**: El sistema debe permitir la creación de un personaje jugable con los siguientes atributos: Puntos de vida, Ataque, Defensa, Nivel, Inventario.
+🔫 Disparo doble – Doble proyectil durante 10s.
 
-* **R1.2. Creación de Enemigos**: El sistema debe permitir la creación de enemigos con los siguientes atributos: Puntos de vida, Ataque, Defensa, Tipo ("volador", "terrestre").
+⚡ Disparo rápido – Mayor velocidad de disparo durante 10s.
 
-* **R2.1. Creación de Trampas Explosivas**: El sistema debe permitir la creación de trampas explosivas con atributos de: Alcance de explosión, Daño por explosión.
+❤️ Curación – Recupera 1 punto de vida (máx. 5).
 
-* **R2.2. Creación de Tesoros**: El sistema debe permitir la creación de tesoros con un atributo de: Valor monetario.
+🛡️ Escudo – Inmunidad durante 5 segundos.
 
-* **R2.3. Creación de Armamento/Defensa**: El sistema debe permitir la creación de objetos de armamento y defensa con atributos de: Aumento de ataque/defensa, Precio de compra/venta.
+👹 Jefes poderosos en los niveles 5 y 10.
 
-* **R3.1. Interacción de Combate**: El personaje debe poder atacar y defenderse de los enemigos.
+🎨 Fondos de alta resolución (1280x720) con transición suave entre niveles.
 
-* **R3.2. Recolección de Objetos**: El personaje debe poder recolectar trampas explosivas y tesoros.
+🎵 Soporte para añadir música y efectos sonoros.
 
-* **R3.3. Interacción con Armamento/Defensa**: El personaje debe poder comprar, usar y vender objetos de armamento y defensa.
+# 🧩 Estructura del proyecto
+SpaceAdventure/
+│
+├── main.py
+├── assets/
+│   ├── player.png
+│   ├── enemy_ground.png
+│   ├── enemy_flying.png
+│   ├── final_boss.png
+│   ├── power_double.png
+│   ├── heal.png
+│   ├── fast.png
+│   ├── power_shield.png
+│   ├── background.png
+│   ├── background2.png
+│   ├── ...
+│   └── background10.png
+│
+└── README.md
 
-* **R3.4. Interacción con el Entorno**: El personaje debe poder recolectar objetos y esquivar obstáculos dentro del escenario.
 
-* **R4.1. Generación del Escenario**: El sistema debe generar un escenario desconocido con diferentes áreas explorables.
+📂 Puedes agregar tus propias imágenes o reemplazar las existentes, manteniendo los nombres para que el juego las reconozca automáticamente.
 
-* **R4.2. Distribución de Elementos**: El sistema debe ubicar aleatoriamente enemigos y objetos dentro del escenario.
+# ⚙️ Instalación
 
-* **R4.3. Zonas de Venta**: El sistema debe incluir zonas de venta donde el personaje pueda comprar armamento y mejoras.
+Asegúrate de tener Python 3.9 o superior instalado.
 
-* **R5.1. Mecánica de Combate**: El sistema debe implementar un sistema de combate que permita el ataque y la defensa entre el personaje y los enemigos.
+1️⃣ Abre una terminal en la carpeta del juego.
+2️⃣ Instala la librería pygame:
 
-* **R5.2. Cálculo de Daño**: El sistema debe calcular el daño infligido en base a los atributos de ataque, defensa y puntos de vida.
+pip install pygame
 
-* **R5.3. Efectos Especiales**: El sistema debe generar efectos especiales basados en el tipo de ataque y la interacción entre objetos (ej: explosión de trampas).
 
-* **R6.1. Sistema de Experiencia y Nivel**: El personaje debe ganar experiencia al derrotar enemigos y recolectar objetos valiosos, lo que lleva al aumento de nivel.
+# 3️⃣ Ejecuta el juego:
 
-* **R6.2. Mejora de Atributos**: El sistema debe permitir la mejora de los atributos del personaje (puntos de vida, ataque, defensa) al subir de nivel.
-
-* **R6.3. Acceso a Nuevo Equipamiento**: El sistema debe permitir el acceso a nuevo armamento y defensas a medida que el personaje avanza de nivel.
-
-* **R7.1. Victoria por Exploración**: El juego debe tener una condición de victoria al completar la exploración del mapa del juego.
-
-* **R7.2. Victoria por Combate Final**: El juego debe tener una condición de victoria al derrotar a un jefe final.
-
-* **R7.3. Victoria por Puntaje:**: El juego debe tener una condición de victoria al alcanzar un puntaje determinado.
-
-* **R8.1. Interfaz de Usuario (UI)**: sistema debe proporcionar una interfaz de usuario intuitiva y fácil de usar que muestre información relevante al jugador (puntos de vida, inventario, nivel, etc.).
-
-* **R8.2. Retroalimentación del Jugador**: El sistema debe proporcionar retroalimentación visual y auditiva clara para las acciones del jugador (ej: daño recibido, recolección de objetos, etc.).
-
-#### Opcionales
-
-* **O1. Niveles de Dificultad**: El juego debe permitir la selección de diferentes niveles de dificultad, que afecten a los atributos de los enemigos, la cantidad de objetos y la complejidad del escenario.
-
-* **O2. Gráficos**: El sistema debe utilizar gráficos de alta calidad que sean consistentes con el estilo visual del juego.
-
-* **O3. Efectos de Sonido**: El sistema debe incluir efectos de sonido para las acciones del jugador, los enemigos y el entorno.
-
-* **O4. Sistema de Logros/Desafíos**: El sistema debe incluir un sistema de logros o desafíos para recompensar al jugador por completar tareas específicas.
-
-* **O5. Música de Fondo**: El sistema debe incluir música de fondo que se adapte al ambiente y la acción del juego.
-
-* **O6. Tutorial**: El sistema debe incluir un tutorial interactivo para enseñar a los nuevos jugadores las mecánicas básicas del juego.
-
-* **O7. Ayuda**: El sistema debe proporcionar un sistema de ayuda contextual que explique las funcionalidades y objetos del juego.
-
-* **O8. Sistema de Personalización**: El sistema debe permitir la personalización del personaje, ya sea cambio de vestimenta, o de armas.
-
-* **O9. Multijugador**: Incluir opciones multijugador, se deben definir los modos de juego, la cantidad de jugadores y la comunicación entre ellos.
-
-#### Glosario
-
-- Puntos de vida: Representa la resistencia del personaje/enemigo al daño.
-- Ataque: Define el poder de ataque del personaje/enemigo.
-- Defensa: Representa la capacidad del personaje/enemigo para resistir el daño.
-- Nivel: Indica el progreso del personaje y habilita nuevas habilidades.
-- Inventario: Almacena los objetos que el personaje recolecta.
-- Tipo: Puede variar según el comportamiento o habilidades del enemigo (ej: volador, terrestre, etc.).
-- Trampas explosivas: Deben tener diferentes alcances y efectos negativos sobre el personaje.
-- Tesoros: Deben tener diferentes objetos valiosos que se traduzcan en dinero para el personaje al venderlos.
-- Armamento/Defensa: El personaje debe poder comprar/vender para mejorar su ataque/defensa.
-
-## Diseño
-
-![Diagrama de Clases](./docs/diagramas.png)
-
-## Instalación
-
-1. Clonar el proyecto
-
-```bash
-git clone https://github.com/UR-CC/lpa1-taller-videojuegos.git
-cd lpa1-taller-videojuegos
-```
-
-2. Crear y activar entorno virtual
-
-```bash
-python -m venv venv
-venv/bin/activate
-```
-
-3. Instalar librerías y dependencias
-
-```bash
-pip install -r requirements.txt
-```
-    
-## Ejecución
-
-1. Ejecutar el proyecto
-
-```bash
-cd lpa1-taller-videojuegos
 python main.py
-```
 
+
+💡 Si estás en Windows, puedes crear un acceso directo o un archivo .bat para iniciar automáticamente el juego.
+
+🕹️ Controles del jugador
+Acción	Tecla
+Mover a la izquierda	⬅️
+Mover a la derecha	➡️
+Disparar	Barra espaciadora (SPACE)
+Salir del juego	Cerrar ventana o ALT + F4
+❤️ Mecánicas del juego
+
+Comienzas con 3 vidas (puedes cambiarlo en Player.__init__()).
+
+Cada nivel tiene una oleada más que el anterior.
+
+Cada 5 niveles aparece un jefe final.
+
+Si derrotas al jefe del nivel 10, ganas el juego.
+
+Al morir, aparece el mensaje 💀 Game Over 💀.
+
+🧠 Configuración avanzada (main.py)
+
+Puedes ajustar fácilmente:
+
+Número de niveles → NUM_LEVELS = 10
+
+Vidas iniciales del jugador → self.hp = 3
+
+Duración del escudo → 5000 ms (línea en update())
+
+Velocidad del scroll → variable scroll_y
+
+Enemigos por oleada → BASE_ENEMIES
+
+# 🌌 Créditos
+
+Desarrollado por Jaider Reyes
+🎓 Estudiante de Ingeniería de Sistemas, apasionado por la mecatrónica, los robots y los videojuegos futuristas.
+⚙️ Programado y diseñado completamente en Python + Pygame.
+
+# 🚀 Próximas mejoras sugeridas
+
+Sonido y música de fondo.
+
+Sistema de puntuaciones guardadas (highscore).
+
+Nuevos tipos de enemigos.
+
+Modo cooperativo local o competitivo.
+
+Selector de dificultad.
