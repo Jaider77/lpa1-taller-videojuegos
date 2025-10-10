@@ -74,6 +74,16 @@ pip install pygame
 
 # 3️⃣ Ejecuta el juego:
 
+# crea el entorno (wsl)
+python3 -m venv venv
+
+# Activalo
+source venv/bin/activate
+
+# Instala pygame
+pip install pygame 
+
+# Ejecuta el juego "Tienes que estar dentro del archivo Main.py"
 python main.py
 
 
