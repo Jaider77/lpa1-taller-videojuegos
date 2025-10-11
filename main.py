@@ -1,3 +1,4 @@
+
 # ...existing code...
 import pygame
 import random
@@ -133,8 +134,9 @@ class SimpleStarfield:
         if self.bg_img:
             img = self.bg_img.copy()
             img.set_alpha(120)
-            y1 = -int(self.y_offset)
-            y2 = y1 + self.height
+            y_offset_mod = self.y_offset % self.height  # Normaliza a 0-height.
+            y1 = int(y_offset_mod) - self.height  # Posición superior (entra desde abajo, pero ajustada para inverso).
+            y2 = y1 + self.height  # Segunda copia para seamless.
             surf.blit(img, (0, y1))
             surf.blit(img, (0, y2))
 
@@ -145,31 +147,55 @@ class SimpleStarfield:
         surf.blit(grad, (0, 0), special_flags=pygame.BLEND_RGBA_SUB)
 
         for px, py, pr, col, _ in self.planets:
+            y = (py % self.height)  # Wrap Y para que planetas que salen por arriba reaparezcan abajo.
             safe_col = tuple(max(0, min(255, int(c))) for c in col)
             planet_s = pygame.Surface((pr*2, pr*2), pygame.SRCALPHA)
             pygame.draw.circle(planet_s, safe_col + (160,), (pr, pr), pr)
             pygame.draw.circle(planet_s, (255,255,255,30), (int(pr*0.7), int(pr*0.6)), int(pr*0.25))
-            surf.blit(planet_s, (int(px - pr), int(py - pr - (self.y_offset % self.height))))
+            surf.blit(planet_s, (int(px - pr), int(y - pr)))
 
-        # corregido: usar bright en las tres componentes
+
+        # usar bright en las tres componentes
+
+
         for sx, sy, spd, size, bright in self.stars:
-            y = (sy - self.y_offset) % self.height
+            y = (sy % self.height)  # Wrap Y para movimiento continuo.
+            if y < 0: y += self.height  # Asegura Y positiva.
             c = max(0, min(255, int(bright)))
             color = (c, c, c)
             pygame.draw.circle(surf, color, (int(sx), int(y)), size)
 
+
+# ...existing code...
 # ------------------------- SPRITES / CARGA -------------------------
-PLAYER_IMG = load_image("assets/player.png", (64, 64)) or pygame.Surface((64, 64), pygame.SRCALPHA)
-ENEMY_GROUND_IMG = load_image("assets/enemy_ground.png", (56, 56)) or pygame.Surface((56, 56), pygame.SRCALPHA)
-ENEMY_FLY_IMG = load_image("assets/enemy_flying.png", (56, 56)) or pygame.Surface((56, 56), pygame.SRCALPHA)
-BOSS_IMG = load_image("assets/final_boss.png", (260, 260)) or pygame.Surface((260, 260), pygame.SRCALPHA)
+PLAYER_IMG = load_image("assets/player.png", (64, 64))
+if PLAYER_IMG is None:
+    PLAYER_IMG = pygame.Surface((64, 64), pygame.SRCALPHA)
+    PLAYER_IMG.fill((100, 180, 255))  # fallback visible
+
+ENEMY_GROUND_IMG = load_image("assets/enemy_ground.png", (56, 56))
+if ENEMY_GROUND_IMG is None:
+    ENEMY_GROUND_IMG = pygame.Surface((56, 56), pygame.SRCALPHA)
+    ENEMY_GROUND_IMG.fill((200, 80, 80))  # fallback visible para depuración
+
+ENEMY_FLY_IMG = load_image("assets/enemy_flying.png", (56, 56))
+if ENEMY_FLY_IMG is None:
+    ENEMY_FLY_IMG = pygame.Surface((56, 56), pygame.SRCALPHA)
+    ENEMY_FLY_IMG.fill((200, 160, 60))  # fallback visible para depuración
+
+BOSS_IMG = load_image("assets/final_boss.png", (260, 260))
+if BOSS_IMG is None:
+    BOSS_IMG = pygame.Surface((260, 260), pygame.SRCALPHA)
+    BOSS_IMG.fill((180, 50, 180))  # fallback visible
 
 def load_power(name):
+    """Carga una imagen de powerup o devuelve un fallback visible."""
     img = load_image(f"assets/{name}.png", (36, 36))
     if img:
         return img
-    s = pygame.Surface((36,36), pygame.SRCALPHA)
-    pygame.draw.circle(s, (100,200,255), (18,18), 16)
+    s = pygame.Surface((36, 36), pygame.SRCALPHA)
+    pygame.draw.circle(s, (100, 200, 255), (18, 18), 16)
+    pygame.draw.circle(s, (255, 255, 255, 40), (12, 12), 6)
     return s
 
 POWER_DOUBLE_IMG = load_power("power_double")
@@ -178,6 +204,10 @@ POWER_FAST_IMG   = load_power("fast")
 POWER_SHIELD_IMG = load_power("power_shield")
 POWER_RAFAGA_IMG = load_power("rafaga")
 
+# Opcional: imprimir si faltan archivos para diagnosticar
+for p in ("assets/enemy_ground.png","assets/enemy_flying.png","assets/player.png"):
+    if not os.path.exists(p):
+        print(f"[ADVERTENCIA] No encontrado: {p}")
 # ------------------------- PARÁMETROS -------------------------
 NUM_LEVELS = 10
 BASE_ENEMIES = 6
@@ -210,15 +240,19 @@ class Bullet(pygame.sprite.Sprite):
 
 class EnemyBullet(pygame.sprite.Sprite):
     def __init__(self, x, y, speed):
-        super().__init__()
-        surf = pygame.Surface((8,14))
+        super().__init__()  # Constructor padre.
+        surf = pygame.Surface((8,14))  # Superficie para la bala (roja).
         surf.fill((255,80,80))
         self.image = surf
         self.rect = self.image.get_rect(center=(x,y))
-        self.speedy = speed
+        self.speedy = speed  # Velocidad Y inicial (para compatibilidad con enemigos normales).
+        self.vx = 0  # NUEVO: Velocidad X inicial (0 por default, para balas verticales).
+
     def update(self):
-        self.rect.y += self.speedy
-        if self.rect.top > HEIGHT:
+        self.rect.x += self.vx  # NUEVO: Mueve en X (para abanico del boss).
+        self.rect.y += self.speedy  # Mueve en Y (descendente).
+        # Elimina si sale de pantalla (incluyendo lados).
+        if self.rect.top > HEIGHT or self.rect.bottom < 0 or self.rect.right < 0 or self.rect.left > WIDTH:
             self.kill()
 
 class PowerUp(pygame.sprite.Sprite):
@@ -242,7 +276,7 @@ class Player(pygame.sprite.Sprite):
         self.target_y = target_y
         self.is_entering = initial_entry
         self.entry_speed = 5
-        self.hp = 5
+        self.hp = 15
         self.score = 0
         self.damage = PLAYER_BASE_DAMAGE
         self.last_shot = 0
@@ -350,17 +384,19 @@ class Player(pygame.sprite.Sprite):
         if ptype == "double":
             self.double_shot = True; self.double_timer = now
         elif ptype == "heal":
-            self.hp = min(self.hp + 1, 5)
+            # CAMBIO: Aumenta +1, pero máximo 20 (en lugar de 5). Ajusta el 20 si quieres otro límite.
+            self.hp = min(self.hp + 1, 20)
         elif ptype == "fast":
             self.bullet_speed = -20; self.fast_timer = now
         elif ptype == "shield":
             self.shield = True; self.shield_timer = now
         elif ptype == "rafaga":
             self.rafaga_active = True
-            self.rafaga_timer = now
-            self.rafaga_last_shot = 0
-        if snd_powerup:
-            snd_powerup.play()
+        self.rafaga_timer = now
+        self.rafaga_last_shot = 0
+    if snd_powerup:
+        snd_powerup.play()
+
 
     def reset_entry(self):
         self.rect.y = -120
@@ -374,11 +410,16 @@ class Enemy(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft=(x, y))
         self.speedx = random.choice([-1, 1]) * (1 + level * 0.3)
         self.hp = 1 + (1 if flying else 0) + (level//3)
+    
     def update(self):
         self.rect.x += self.speedx
         if self.rect.left <= 0 or self.rect.right >= WIDTH:
             self.speedx *= -1
             self.rect.y += 18
+        
+        # NUEVO: Eliminar si sale completamente de pantalla (evita invisibles)
+        if self.rect.top > HEIGHT + 50 or self.rect.bottom < -50:
+            self.kill()
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self, level):
@@ -564,7 +605,7 @@ while current_level <= NUM_LEVELS:
             WIN.blit(s, (player.rect.x-15, player.rect.y-15))
 
         if player.rafaga_active:
-            WIN.blit(font_default.render("⚡ RÁFAGA ACTIVA ⚡", True, (100,200,255)), (WIDTH//2 - 90, 20))
+            WIN.blit(font_default.render(" RÁFAGA ACTIVA ", True, (100,200,255)), (WIDTH//2 - 90, 20))
 
         pygame.display.flip()
 
@@ -581,4 +622,3 @@ pygame.display.flip()
 pygame.time.wait(3500)
 pygame.quit()
 sys.exit()
-# ...existing code...
